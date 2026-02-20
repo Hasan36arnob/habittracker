@@ -37,12 +37,12 @@ jobs:
         run: |
           if [ -n "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" ]; then
             echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/release.keystore
-            cat <<EOF > android/keystore.properties
-            storeFile=app/release.keystore
-            storePassword=${{ secrets.ANDROID_STORE_PASSWORD }}
-            keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}
-            keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}
-            EOF
+            printf '%s\n' \
+              "storeFile=app/release.keystore" \
+              "storePassword=${{ secrets.ANDROID_STORE_PASSWORD }}" \
+              "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" \
+              "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" \
+              > android/keystore.properties
             echo "Release keystore configured."
           else
             echo "No signing secrets found. Release APK will be unsigned."
