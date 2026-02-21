@@ -123,7 +123,7 @@ export function HabitProvider({children}: HabitProviderProps) {
     if (!state.isLoading) {
       saveData();
     }
-  }, [state.habits, state.habitEntries, state.streaks, state.userAchievements, saveData]);
+  }, [state.habits, state.habitEntries, state.streaks, state.userAchievements]);
 
   const loadData = async () => {
     try {

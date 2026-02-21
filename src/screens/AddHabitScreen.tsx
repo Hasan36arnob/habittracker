@@ -73,7 +73,7 @@ function AddHabitScreen(): React.JSX.Element {
       });
 
       navigation.goBack();
-    } catch (error) {
+    } catch {
       Alert.alert('Error', 'Failed to create habit');
     } finally {
       setIsSubmitting(false);

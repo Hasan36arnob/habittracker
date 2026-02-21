@@ -48,8 +48,8 @@ export function AuthProvider({children}: AuthProviderProps) {
           premiumExpiry: parsedUser.premiumExpiry ? new Date(parsedUser.premiumExpiry) : undefined,
         });
       }
-    } catch (_error) {
-      console.error('Error loading user:', _error);
+    } catch {
+      console.error('Error loading user');
     } finally {
       setIsLoading(false);
     }
@@ -62,8 +62,8 @@ export function AuthProvider({children}: AuthProviderProps) {
       } else {
         await AsyncStorage.removeItem('user');
       }
-    } catch (_error) {
-      console.error('Error saving user:', _error);
+    } catch {
+      console.error('Error saving user');
     }
   };
 
@@ -83,7 +83,7 @@ export function AuthProvider({children}: AuthProviderProps) {
 
       setUser(mockUser);
       await saveUser(mockUser);
-    } catch (_error) {
+    } catch {
       throw new Error('Login failed');
     } finally {
       setIsLoading(false);
@@ -106,7 +106,7 @@ export function AuthProvider({children}: AuthProviderProps) {
 
       setUser(newUser);
       await saveUser(newUser);
-    } catch (_error) {
+    } catch {
       throw new Error('Registration failed');
     } finally {
       setIsLoading(false);

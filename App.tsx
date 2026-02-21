@@ -23,6 +23,27 @@ import {AuthProvider} from './src/context/AuthContext';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+// Tab Icon Component
+function TabIcon({route, color, size}: {route: {name: string}; color: string; size: number}) {
+  let iconName: string;
+
+  if (route.name === 'Dashboard') {
+    iconName = 'dashboard';
+  } else if (route.name === 'Habits') {
+    iconName = 'list';
+  } else if (route.name === 'Statistics') {
+    iconName = 'analytics';
+  } else if (route.name === 'Calendar') {
+    iconName = 'calendar-today';
+  } else if (route.name === 'Profile') {
+    iconName = 'person';
+  } else {
+    iconName = 'settings';
+  }
+
+  return <Icon name={iconName} size={size} color={color} />;
+}
+
 // Home Stack Navigator
 function HomeStack() {
   return (
@@ -55,26 +76,8 @@ function HomeStack() {
 function MainTabs() {
   return (
     <Tab.Navigator
-      screenOptions={({route}) => ({
-        tabBarIcon: ({color, size}) => {
-          let iconName: string;
-
-          if (route.name === 'Dashboard') {
-            iconName = 'dashboard';
-          } else if (route.name === 'Habits') {
-            iconName = 'list';
-          } else if (route.name === 'Statistics') {
-            iconName = 'analytics';
-          } else if (route.name === 'Calendar') {
-            iconName = 'calendar-today';
-          } else if (route.name === 'Profile') {
-            iconName = 'person';
-          } else {
-            iconName = 'settings';
-          }
-
-          return <Icon name={iconName} size={size} color={color} />;
-        },
+      screenOptions={{
+        tabBarIcon: ({color, size}) => <TabIcon route={{name: 'Dashboard'}} color={color} size={size} />,
         tabBarActiveTintColor: '#8EC5FC',
         tabBarInactiveTintColor: '#9EB3CF',
         tabBarStyle: {
@@ -83,7 +86,7 @@ function MainTabs() {
         },
         headerStyle: {backgroundColor: '#0B162A'},
         headerTintColor: '#FFFFFF',
-      })}>
+      }}>
       <Tab.Screen name="Dashboard" component={HomeStack} />
       <Tab.Screen name="Habits" component={HabitsScreen} />
       <Tab.Screen name="Statistics" component={StatisticsScreen} />
