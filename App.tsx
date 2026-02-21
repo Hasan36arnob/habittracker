@@ -56,7 +56,7 @@ function MainTabs() {
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
-        tabBarIcon: ({focused, color, size}) => {
+        tabBarIcon: ({color, size}) => {
           let iconName: string;
 
           if (route.name === 'Dashboard') {

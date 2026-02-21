@@ -7,14 +7,12 @@ import {
   TouchableOpacity,
   View,
   Alert,
-  Platform,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useHabits} from '../context/HabitContext';
 import {useTheme} from '../context/ThemeContext';
-import {HabitCategory} from '../types';
 
 const habitIcons = [
   'fitness_center', 'school', 'work', 'self_improvement', 'people',
@@ -54,7 +52,7 @@ function AddHabitScreen(): React.JSX.Element {
       return;
     }
 
-    const targetNum = parseInt(target);
+    const targetNum = parseInt(target, 10);
     if (isNaN(targetNum) || targetNum <= 0) {
       Alert.alert('Error', 'Please enter a valid target');
       return;
@@ -81,8 +79,6 @@ function AddHabitScreen(): React.JSX.Element {
       setIsSubmitting(false);
     }
   };
-
-  const selectedCategory = state.categories.find(cat => cat.id === category);
 
   return (
     <SafeAreaView style={[styles.safe, {backgroundColor: colors.background}]}>

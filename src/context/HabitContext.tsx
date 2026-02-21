@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useReducer, useEffect, ReactNode} from 'react';
+import React, {createContext, useContext, useReducer, useEffect, ReactNode, useCallback} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Habit, HabitEntry, HabitStreak, AppState, defaultCategories} from '../types';
 
@@ -123,7 +123,7 @@ export function HabitProvider({children}: HabitProviderProps) {
     if (!state.isLoading) {
       saveData();
     }
-  }, [state.habits, state.habitEntries, state.streaks, state.userAchievements]);
+  }, [state.habits, state.habitEntries, state.streaks, state.userAchievements, saveData]);
 
   const loadData = async () => {
     try {
@@ -168,7 +168,7 @@ export function HabitProvider({children}: HabitProviderProps) {
     }
   };
 
-  const saveData = async () => {
+  const saveData = useCallback(async () => {
     try {
       await Promise.all([
         AsyncStorage.setItem('habits', JSON.stringify(state.habits)),
@@ -181,7 +181,7 @@ export function HabitProvider({children}: HabitProviderProps) {
       console.error('Error saving data:', error);
       dispatch({type: 'SET_ERROR', payload: 'Failed to save data'});
     }
-  };
+  }, [state.habits, state.habitEntries, state.streaks, state.user, state.userAchievements]);
 
   const addHabit = async (habitData: Omit<Habit, 'id' | 'createdAt' | 'updatedAt'>) => {
     const habit: Habit = {
@@ -332,7 +332,7 @@ export function HabitProvider({children}: HabitProviderProps) {
   };
 
   const exportData = async (): Promise<string> => {
-    const exportData = {
+    const data = {
       habits: state.habits,
       habitEntries: state.habitEntries,
       streaks: state.streaks,
@@ -342,25 +342,25 @@ export function HabitProvider({children}: HabitProviderProps) {
       version: '1.0.0',
     };
 
-    return JSON.stringify(exportData, null, 2);
+    return JSON.stringify(data, null, 2);
   };
 
   const importData = async (data: string) => {
     try {
-      const importData = JSON.parse(data);
+      const parsedData = JSON.parse(data);
 
-      if (!importData.habits || !Array.isArray(importData.habits)) {
+      if (!parsedData.habits || !Array.isArray(parsedData.habits)) {
         throw new Error('Invalid import data format');
       }
 
       // Convert date strings back to Date objects
-      const habits = importData.habits.map((h: any) => ({
+      const habits = parsedData.habits.map((h: any) => ({
         ...h,
         createdAt: new Date(h.createdAt),
         updatedAt: new Date(h.updatedAt),
       }));
 
-      const habitEntries = importData.habitEntries?.map((e: any) => ({
+      const habitEntries = parsedData.habitEntries?.map((e: any) => ({
         ...e,
         timestamp: new Date(e.timestamp),
       })) || [];
@@ -370,9 +370,9 @@ export function HabitProvider({children}: HabitProviderProps) {
         payload: {
           habits,
           habitEntries,
-          streaks: importData.streaks || [],
-          user: importData.user || null,
-          userAchievements: importData.userAchievements || [],
+          streaks: parsedData.streaks || [],
+          user: parsedData.user || null,
+          userAchievements: parsedData.userAchievements || [],
         },
       });
     } catch (error) {

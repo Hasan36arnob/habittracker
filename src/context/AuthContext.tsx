@@ -48,8 +48,8 @@ export function AuthProvider({children}: AuthProviderProps) {
           premiumExpiry: parsedUser.premiumExpiry ? new Date(parsedUser.premiumExpiry) : undefined,
         });
       }
-    } catch (error) {
-      console.error('Error loading user:', error);
+    } catch (_error) {
+      console.error('Error loading user:', _error);
     } finally {
       setIsLoading(false);
     }
@@ -62,12 +62,12 @@ export function AuthProvider({children}: AuthProviderProps) {
       } else {
         await AsyncStorage.removeItem('user');
       }
-    } catch (error) {
-      console.error('Error saving user:', error);
+    } catch (_error) {
+      console.error('Error saving user:', _error);
     }
   };
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, _password: string) => {
     setIsLoading(true);
     try {
       // For demo purposes, accept any email/password combination
@@ -83,14 +83,14 @@ export function AuthProvider({children}: AuthProviderProps) {
 
       setUser(mockUser);
       await saveUser(mockUser);
-    } catch (error) {
+    } catch (_error) {
       throw new Error('Login failed');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const register = async (name: string, email: string, password: string) => {
+  const register = async (name: string, email: string, _password: string) => {
     setIsLoading(true);
     try {
       // For demo purposes, accept any registration
@@ -106,7 +106,7 @@ export function AuthProvider({children}: AuthProviderProps) {
 
       setUser(newUser);
       await saveUser(newUser);
-    } catch (error) {
+    } catch (_error) {
       throw new Error('Registration failed');
     } finally {
       setIsLoading(false);
