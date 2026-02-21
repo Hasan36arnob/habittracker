@@ -1,1 +1,11 @@
-{}
+{
+  "ignore_dirs": ["node_modules", ".git"],
+  "filetypes": [
+    "js",
+    "ts",
+    "tsx",
+    "json",
+    "css",
+    "scss"
+  ]
+}
